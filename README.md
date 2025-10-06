@@ -31,6 +31,12 @@
 $ npm install
 ```
 
+## Erstelle eine ".env" Datei im Projektverzeichnis
+Inhalte:
+```
+DATABASE_URL="file:./dev.db"
+```
+
 ## Compile and run the project
 
 ```bash
