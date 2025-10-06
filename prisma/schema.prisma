@@ -1,5 +1,3 @@
-#Updaten mit: npx prisma migrate dev --namederänderung init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -31,6 +29,8 @@ model MusicItem {
   creator   User       @relation("CreatedMusic", fields: [createdBy], references: [id])
   collections UserMusicCollection[]
   reviews     Review[]
+
+  @@unique([title, artist, album])
 }
 
 model UserMusicCollection {
