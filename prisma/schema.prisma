@@ -1,0 +1,74 @@
+#Updaten mit: npx prisma migrate dev --namederänderung init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  username String    @unique
+  role     Role
+  created  DateTime  @default(now())
+  music    MusicItem[] @relation("CreatedMusic")
+  collection UserMusicCollection[]
+  reviews   Review[]
+}
+
+model MusicItem {
+  id        Int       @id @default(autoincrement())
+  title     String
+  artist    String
+  album     String?
+  year      Int?
+  genre     String?
+  type      MusicType
+  createdBy Int
+  creator   User       @relation("CreatedMusic", fields: [createdBy], references: [id])
+  collections UserMusicCollection[]
+  reviews     Review[]
+}
+
+model UserMusicCollection {
+  id       Int       @id @default(autoincrement())
+  userId   Int
+  musicId  Int
+  status   Status    @default(NONE)
+  addedAt  DateTime  @default(now())
+
+  user   User      @relation(fields: [userId], references: [id])
+  music  MusicItem @relation(fields: [musicId], references: [id])
+}
+
+model Review {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  musicId   Int
+  comment   String
+  rating    Int?
+  createdAt DateTime  @default(now())
+
+  user   User      @relation(fields: [userId], references: [id])
+  music  MusicItem @relation(fields: [musicId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  LIKE
+  DISLIKE
+  FAVOURITE
+  NONE
+}
+
+enum MusicType {
+  TRACK
+  ALBUM
+}
