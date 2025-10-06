@@ -12,6 +12,7 @@ Gruppe A
 
 ```bash
 $ npm install
+$ npx prisma db seed
 ```
 
 ## Erstelle eine ".env" Datei im Projektverzeichnis
