@@ -1,18 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserMusicCollection } from '@prisma/client';
-import { UpdateCollectionDto, CreateCollectionDto, Status  } from '../dto/collection.dto';
+import { UpdateCollectionDto, CreateCollectionDto, Status } from '../dto/collection.dto';
 
 @Injectable()
 export class CollectionService {
   constructor(private prisma: PrismaService) {}
 
+  // Get all user-music collection entries
   async getAll(): Promise<UserMusicCollection[]> {
     return this.prisma.userMusicCollection.findMany({
       include: { music: true, user: true },
     });
   }
 
+  // Get all collection entries for a specific user
   async getByUser(userId: number): Promise<UserMusicCollection[]> {
     return this.prisma.userMusicCollection.findMany({
       where: { userId },
@@ -20,6 +22,7 @@ export class CollectionService {
     });
   }
 
+  // Add a new music item to a user's collection
   async add(dto: CreateCollectionDto): Promise<UserMusicCollection> {
     return this.prisma.userMusicCollection.create({
       data: {
@@ -30,6 +33,7 @@ export class CollectionService {
     });
   }
 
+  // Update the status of a collection entry
   async update(id: number, dto: UpdateCollectionDto): Promise<UserMusicCollection> {
     return this.prisma.userMusicCollection.update({
       where: { id },
@@ -37,6 +41,7 @@ export class CollectionService {
     });
   }
 
+  // Remove a music item from a users collection
   async remove(id: number): Promise<UserMusicCollection> {
     return this.prisma.userMusicCollection.delete({ where: { id } });
   }

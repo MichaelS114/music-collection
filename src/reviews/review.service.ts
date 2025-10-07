@@ -7,13 +7,15 @@ import { CreateReviewDto, UpdateReviewDto } from '../dto/review.dto';
 export class ReviewService {
   constructor(private prisma: PrismaService) {}
 
+  // Get all reviews for a music item
   async getByMusic(musicId: number): Promise<Review[]> {
     return this.prisma.review.findMany({
       where: { musicId },
-      include: { user: true },
+      include: { user: true }, // Include user info for each review
     });
   }
 
+  // Add a new review for a music item
   async add(dto: CreateReviewDto): Promise<Review> {
     return this.prisma.review.create({
       data: {
@@ -25,17 +27,18 @@ export class ReviewService {
     });
   }
 
+  // Update an existing review (comment or rating)
   async update(id: number, dto: UpdateReviewDto): Promise<Review> {
-  return this.prisma.review.update({
-    where: { id },
-    data: {
-      comment: dto.comment,
-      rating: dto.rating,
-    },
-  });
-}
+    return this.prisma.review.update({
+      where: { id },
+      data: {
+        comment: dto.comment,
+        rating: dto.rating,
+      },
+    });
+  }
 
-
+  // Delete a review by ID
   async remove(id: number): Promise<Review> {
     return this.prisma.review.delete({ where: { id } });
   }

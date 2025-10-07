@@ -2,13 +2,13 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // 1. Datenbank bereinigen (Reihenfolge wegen Foreign Keys wichtig!)
+  // Clear database. Order is important due to relations in the database
   await prisma.review.deleteMany();
   await prisma.userMusicCollection.deleteMany();
   await prisma.musicItem.deleteMany();
   await prisma.user.deleteMany();
 
-  // 2. Dummy-Daten anlegen
+  // Create dummy data
 
   // Admin
   const admin = await prisma.user.create({
@@ -18,7 +18,7 @@ async function main() {
     },
   });
 
-  // Normaler User
+  // Normal iser
   const user = await prisma.user.create({
     data: {
       username: 'user',
@@ -26,7 +26,7 @@ async function main() {
     },
   });
 
-  // Musikitems
+  // Musicitems
   const song1 = await prisma.musicItem.create({
     data: {
       title: 'Love Story',
