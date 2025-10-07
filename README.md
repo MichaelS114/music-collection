@@ -1,4 +1,5 @@
-# MusicCollection 
+<img src="./logo-music.png" style="height: 40px;" />
+
 KV Service Engineering
 
 Gruppe A
