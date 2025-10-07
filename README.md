@@ -28,6 +28,14 @@ key: x-admin
 
 value: true
 
+## Update database schema
+
+Edit the schema file and run the following code:
+
+```
+npx prisma migrate dev --NameDerÄnderung init
+```
+
 ## Compile and run the project
 
 ```
