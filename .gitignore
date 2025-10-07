@@ -56,3 +56,26 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /generated/prisma
+
+# Node
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+
+# Prisma
+.prisma/
+*.db-journal
+
+# SQLite database
+/prisma/dev.db
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# Mac/Windows junk
+.DS_Store
+Thumbs.db

@@ -1,10 +1,25 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MusicController } from './music/music.controller';
+import { CollectionController } from './collections/collection.controller';
+import { ReviewController } from './reviews/review.controller';
+
+import { MusicService } from './music/music.service';
+import { CollectionService } from './collections/collection.service';
+import { ReviewService } from './reviews/review.service';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    MusicController,
+    CollectionController,
+    ReviewController,
+  ],
+  providers: [
+    MusicService,
+    CollectionService,
+    ReviewService,
+    PrismaService,
+  ],
 })
 export class AppModule {}
