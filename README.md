@@ -22,6 +22,12 @@ DATABASE_URL="file:./dev.db"
 $ npx prisma db seed
 ```
 
+!! Bei Verwendung von Admin-Endpunkten folgendes im Header mitsenden:
+
+key: x-admin
+
+value: true
+
 ## Compile and run the project
 
 ```
