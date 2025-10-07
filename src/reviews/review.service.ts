@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Review } from '@prisma/client';
 import { CreateReviewDto, UpdateReviewDto } from '../dto/review.dto';
@@ -9,10 +9,12 @@ export class ReviewService {
 
   // Get all reviews for a music item
   async getByMusic(musicId: number): Promise<Review[]> {
-    return this.prisma.review.findMany({
+    const reviews = await this.prisma.review.findMany({
       where: { musicId },
-      include: { user: true }, // Include user info for each review
+      include: { user: true },
     });
+
+    return reviews;
   }
 
   // Add a new review for a music item

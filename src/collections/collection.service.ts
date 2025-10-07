@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserMusicCollection } from '@prisma/client';
 import { UpdateCollectionDto, CreateCollectionDto, Status } from '../dto/collection.dto';
@@ -7,7 +7,7 @@ import { UpdateCollectionDto, CreateCollectionDto, Status } from '../dto/collect
 export class CollectionService {
   constructor(private prisma: PrismaService) {}
 
-  // Get all user-music collection entries
+  // Get all user music collection entries
   async getAll(): Promise<UserMusicCollection[]> {
     return this.prisma.userMusicCollection.findMany({
       include: { music: true, user: true },
@@ -35,14 +35,29 @@ export class CollectionService {
 
   // Update the status of a collection entry
   async update(id: number, dto: UpdateCollectionDto): Promise<UserMusicCollection> {
-    return this.prisma.userMusicCollection.update({
-      where: { id },
-      data: { status: dto.status },
-    });
+    try {
+      return await this.prisma.userMusicCollection.update({
+        where: { id },
+        data: { status: dto.status },
+      });
+    } catch (error) {
+      // Prisma error P2025 = record not found
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Collection entry with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 
-  // Remove a music item from a users collection
+  // Remove a music item from a user's collection
   async remove(id: number): Promise<UserMusicCollection> {
-    return this.prisma.userMusicCollection.delete({ where: { id } });
+    try {
+      return await this.prisma.userMusicCollection.delete({ where: { id } });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Collection entry with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 }
