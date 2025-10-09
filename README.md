@@ -28,7 +28,14 @@ key: x-admin
 
 value: true
 
-## Update database schema
+## Database schema
+
+<img src="./uml.svg" style="height: 500px;" />
+
+
+## How to
+
+### Update database schema
 
 Edit the schema file and run the following code:
 
@@ -36,7 +43,7 @@ Edit the schema file and run the following code:
 npx prisma migrate dev --NameDerÄnderung init
 ```
 
-## Compile and run the project
+### Compile and run the project
 
 ```
 # development
@@ -49,7 +56,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+### Run tests
 
 ```bash
 # unit tests
