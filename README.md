@@ -10,23 +10,35 @@ Gruppe A
 ```
 $ npm install
 ```
- 2. ".env" Datei im Projektverzeichnis erstellen
+ 2. ".env" Datei im Projektverzeichnis anlegen
  
 Inhalt:
 ```
 DATABASE_URL="file:./dev.db"
 ```
+3. Prisma Client generieren und Migrationen ausführen
 
-3. DB mit Testdaten befüllen
+```
+npx prisma generate
+npx prisma migrate dev
+```
+
+4. DB mit Testdaten befüllen
 ```
 $ npx prisma db seed
 ```
 
+5. Projekt starten
+```
+npm run start:dev
+```
+
 !! Bei Verwendung von Admin-Endpunkten folgendes im Header mitsenden:
 
+```
 key: x-admin
-
 value: true
+```
 
 ## Database schema
 
