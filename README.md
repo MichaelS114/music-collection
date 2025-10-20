@@ -5,12 +5,15 @@ KV Service Engineering
 Gruppe A
 
 ## Project setup
-1. Installieren
+1. Installieren in Ordnern ./client und ./backend
 
 ```
 $ npm install
 ```
- 2. ".env" Datei im Projektverzeichnis anlegen
+
+Die folgenden Punkte beziehen sich nur auf das Backend und werden in ./backend ausgeführt
+
+ 2. ".env" Datei im Projektverzeichnis von ./backend anlegen
  
 Inhalt:
 ```
