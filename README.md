@@ -11,7 +11,9 @@ Gruppe A
 $ npm install
 ```
 
-Die folgenden Punkte beziehen sich nur auf das Backend und werden in ./backend ausgeführt
+
+**Die folgenden Punkte beziehen sich nur auf das Backend und werden in ./backend ausgeführt:**
+
 
  2. ".env" Datei im Projektverzeichnis von ./backend anlegen
  
@@ -31,11 +33,6 @@ npx prisma migrate dev
 $ npx prisma db seed
 ```
 
-5. Projekt starten
-```
-npm run start:dev
-```
-
 !! Bei Verwendung von Admin-Endpunkten folgendes im Header mitsenden:
 
 ```
@@ -50,6 +47,19 @@ value: true
 
 ## How to
 
+### Start the Project:
+
+Frontend starten
+```
+npm run dev
+```
+
+
+Backend starten
+```
+npm run start:dev
+```
+
 ### Update database schema
 
 Edit the schema file and run the following code:
@@ -58,7 +68,7 @@ Edit the schema file and run the following code:
 npx prisma migrate dev --NameDerÄnderung init
 ```
 
-### Compile and run the project
+### Compile and run the backend project
 
 ```
 # development
@@ -71,7 +81,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-### Run tests
+### Run backend tests
 
 ```bash
 # unit tests
