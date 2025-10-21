@@ -1,26 +1,26 @@
 <script setup>
-import ButtonTest from './components/ButtonTest.vue'
-import Logo from './assets/icon.svg'
-
+import Logo from './assets/logo-museek.png';
 </script>
 
 <template>
-  <div>
-    <img
-      :src="Logo"
-      alt="Music Logo"
-      class="logo h-32 mb-4"
-    />
-    <p class="text-lg font-semibold text-gray-700">Thema 3</p>
-     <div class="mt-8">
-      <ButtonTest />
-    </div>
+  <div class="p-4 min-h-screen">
+    <nav class="nav-bar">
+      <img :src="Logo" alt="Logo" class="h-8" />
+      <h1 class="green font-bold text-2xl uppercase">Museek</h1>
+      <RouterLink to="/discover">Discover</RouterLink>
+      <RouterLink to="/collection">My Collection</RouterLink>
+      <RouterLink to="/admin">Admin</RouterLink>
+    </nav>
+    <RouterView />
   </div>
-
 </template>
 
+
 <style scoped>
-/* .logo {
-  filter: drop-shadow(0 0 0.5rem rgba(0, 0, 0, 0.2));
-} */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
 </style>

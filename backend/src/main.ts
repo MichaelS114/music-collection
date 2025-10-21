@@ -25,6 +25,12 @@ async function bootstrap() {
   // Handle Prisma-specific exceptions globally
   app.useGlobalFilters(new PrismaExceptionFilter());
 
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    methods: ['GET','POST','PATCH','DELETE','PUT','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization','X-User-Id'],
+  });
+
   // Start Server on port
   await app.listen(3000);
 }
