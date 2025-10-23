@@ -27,6 +27,7 @@ export interface Review {
   comment: string;
   rating?: number | null;
   createdAt: string;
+  user?: User;
 }
 
 export interface UserMusicCollection {
@@ -35,6 +36,7 @@ export interface UserMusicCollection {
   musicId: number;
   status: Status;
   addedAt: string;
+  music?: MusicItem;
 }
 
 export interface CreateMusicItemDto {
@@ -48,20 +50,23 @@ export interface CreateMusicItemDto {
 }
 export type UpdateMusicItemDto = Partial<CreateMusicItemDto>;
 
-export interface CreateCollectionDto {
+export interface AddItemToCollectionDto {
+  userId: number;
   musicId: number;
-  status?: Status;
-}
-export interface UpdateCollectionDto {
   status: Status;
 }
+
+export type UpdateItemFromCollectionDto = Partial<AddItemToCollectionDto>;
 
 export interface CreateReviewDto {
   musicId: number;
   rating: number;
+  userId: number;
   comment?: string;
 }
 export interface UpdateReviewDto {
   rating?: number;
   comment?: string;
+  userId?: number;
+  musicId?: number;
 }

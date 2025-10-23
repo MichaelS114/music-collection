@@ -10,11 +10,11 @@ import AdminPage from "./views/AdminCollection.vue";
 import CollectionPage from "./views/PersonalCollection.vue";
 
 const routes = [
-  { path: "/", redirect: "/discover" },
+  { path: "/", redirect: "/collection" },
   { path: "/discover", name: "discover", component: DiscoverPage },
   { path: "/collection", name: "collection", component: CollectionPage },
   { path: "/music/:id", name: "music-detail", component: DetailPage, props: true },
-  { path: "/admin", name: "admin", component: AdminPage, meta: { requiresAdmin: true } },
+  { path: "/admin", name: "admin", component: AdminPage },
 ];
 
 const router = createRouter({

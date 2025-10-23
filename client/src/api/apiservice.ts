@@ -6,6 +6,16 @@ const api: AxiosInstance = axios.create({
   timeout: 10_000
 });
 
+/* DEBUG: ADMIN HEADER by default */
+api.interceptors.request.use((config) => {
+  if (typeof (config.headers as any)?.set === 'function') {
+    (config.headers as any).set('x-admin', 'true');
+  } else {
+    (config.headers as any)['x-admin'] = 'true';
+  }
+  return config;
+});
+
 const ApiService = {
   async get(resource: string, slug = "") {
     try {

@@ -47,12 +47,19 @@ export class MusicService {
   // Delete a music item by ID
   async remove(id: number): Promise<MusicItem> {
     try {
-      return await this.prisma.musicItem.delete({ where: { id } });
+      return await this.prisma.$transaction(async (tx) => {
+        await tx.review.deleteMany({ where: { musicId: id } });
+        await tx.userMusicCollection.deleteMany({ where: { musicId: id } });
+        return tx.musicItem.delete({ where: { id } });
+      });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
         // Record not found
         throw new NotFoundException(`Music item with ID ${id} not found`);
       }
+      else if (error.code === 'P2003') {
+          throw new ConflictException(`Cannot delete music item ${id}: related records exist`);
+        }
       throw error;
     }
   }

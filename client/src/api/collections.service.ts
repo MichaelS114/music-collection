@@ -1,34 +1,31 @@
 import ApiService from "@/api/apiservice";
+import type { AxiosResponse } from "axios";
 import type {
   UserMusicCollection,
-  CreateCollectionDto,
-  UpdateCollectionDto,
+  AddItemToCollectionDto,
+  UpdateItemFromCollectionDto,
 } from "@/models/models";
 
-const CollectionsService = {
-  /** GET /collections/user/{userId} */
-  async getForUser(userId: number): Promise<UserMusicCollection[]> {
-    const res = await ApiService.get("collections/user", userId.toString());
-    return res.data;
+export const CollectionsService = {
+  /* GET /collections/user/{userId} */
+  getForUser(userId: number): Promise<AxiosResponse<UserMusicCollection[]>> {
+    return ApiService.get("collections/user", userId.toString());
   },
 
-  /** POST /collections */
-  async add(payload: CreateCollectionDto): Promise<UserMusicCollection> {
-    const res = await ApiService.post("collections", "", payload);
-    return res.data;
+  /* POST /collections */
+  add(payload: AddItemToCollectionDto): Promise<AxiosResponse<UserMusicCollection>> {
+    return ApiService.post("collections", "", payload);
   },
 
-  /** PATCH /collections/{id} */
-  async updateEntry(id: number, payload: UpdateCollectionDto): Promise<UserMusicCollection> {
-    const res = await ApiService.patch("collections", id.toString(), payload);
-    return res.data;
+  /* PATCH /collections/{id} */
+  updateEntry(id: number, payload: UpdateItemFromCollectionDto): Promise<AxiosResponse<UserMusicCollection>> {
+    return ApiService.patch("collections", id.toString(), payload);
   },
 
-  /** DELETE /collections/{id} */
-  async remove(id: number): Promise<void> {
-    await ApiService.delete("collections", id.toString());
+  /* DELETE /collections/{id} */
+  remove(id: number): Promise<AxiosResponse<void>> {
+    return ApiService.delete("collections", id.toString());
   },
 };
 
 export default CollectionsService;
-export { CollectionsService };

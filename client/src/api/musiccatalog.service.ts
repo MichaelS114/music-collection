@@ -1,4 +1,5 @@
 import ApiService from "@/api/apiservice";
+import type { AxiosResponse } from "axios";
 import type {
   MusicItem,
   CreateMusicItemDto,
@@ -7,32 +8,30 @@ import type {
 
 
 export const MusicCatalogService = {
-  /** GET /music */
-  async list(): Promise<MusicItem[]> {
-    const res = await ApiService.get("music");
-    return res.data;
+  /* GET /music */
+  list(): Promise<AxiosResponse<MusicItem[]>> {
+    return ApiService.get("music");
   },
 
-  /** GET /music/{id} */
-  async getById(id: string): Promise<MusicItem> {
-    const res = await ApiService.get("music", id);
-    return res.data;
+  /* GET /music/{id} */
+  getById(id: string): Promise<AxiosResponse<MusicItem>> {
+    return ApiService.get("music", id);
   },
 
-  /** POST /music */
-  async create(payload: CreateMusicItemDto): Promise<MusicItem> {
-    const res = await ApiService.post("music", "", payload);
-    return res.data;
+  /* POST /music */
+  create(payload: CreateMusicItemDto): Promise<AxiosResponse<MusicItem>> {
+    return ApiService.post("music", "", payload);
   },
 
-  /** PATCH /music/{id} */
-  async update(id: string, payload: UpdateMusicItemDto): Promise<MusicItem> {
-    const res = await ApiService.patch("music", id, payload);
-    return res.data;
+  /* PATCH /music/{id} */
+  update(id: string, payload: UpdateMusicItemDto): Promise<AxiosResponse<MusicItem>> {
+    return ApiService.patch("music", id, payload);
   },
 
-  /** DELETE /music/{id} */
-  async remove(id: string): Promise<void> {
-    await ApiService.delete("music", id);
+  /* DELETE /music/{id} */
+  remove(id: string): Promise<AxiosResponse<void>> {
+    return ApiService.delete("music", id);
   },
 };
+
+export default MusicCatalogService;

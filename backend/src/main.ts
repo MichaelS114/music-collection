@@ -28,7 +28,7 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:5173',
     methods: ['GET','POST','PATCH','DELETE','PUT','OPTIONS'],
-    allowedHeaders: ['Content-Type','Authorization','X-User-Id'],
+    allowedHeaders: ['Content-Type','Authorization','X-User-Id', 'x-admin'],
   });
 
   // Start Server on port
