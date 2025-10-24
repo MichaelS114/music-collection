@@ -1,8 +1,10 @@
-<img src="./logo-music.png" style="height: 40px;" />
+<p align="center">
+<img src="./logo-music.svg" style="height: 60px;"/>
+</p>
+<p align="center">
+KV Service Engineering - Gruppe A
+</p>
 
-KV Service Engineering
-
-Gruppe A
 
 ## Project setup
 1. Installieren in Ordnern ./client und ./backend
