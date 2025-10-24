@@ -40,13 +40,6 @@ key: x-admin
 value: true
 ```
 
-** Die folgenden Punkte beziehen sich nur auf das Fronent und werden in ./client ausgeführt: **
-
-```
-$ npm install axios
-$ npm install vue-router
-```
-
 ## Database schema
 
 <img src="./uml.svg" style="height: 500px;" />
