@@ -31,7 +31,7 @@ async function fetchHandled() {
   if (!userId.value) return; // Don't fetch if not logged in
   try {
     // Fetch collection for the actual user
-    const res = await CollectionsService.getForUser(userId.value);
+    const res = await CollectionsService.getMyCollection();
     const rows = res.data ?? [];
 
     const set = new Set<number>();

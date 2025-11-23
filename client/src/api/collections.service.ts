@@ -7,9 +7,14 @@ import type {
 } from "@/models/models";
 
 export const CollectionsService = {
-  /* GET /collections/user/{userId} */
+  /* GET /collections/user/{userId} (admin only)*/
   getForUser(userId: number): Promise<AxiosResponse<UserMusicCollection[]>> {
     return ApiService.get("collections/user", userId.toString());
+  },
+
+  /* GET /collections/my-collection  */
+  getMyCollection(): Promise<AxiosResponse<UserMusicCollection[]>> {
+    return ApiService.get("collections/my-collection");
   },
 
   /* POST /collections */

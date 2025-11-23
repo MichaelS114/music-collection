@@ -35,6 +35,15 @@ export class CollectionController {
     return this.collectionService.getByUser(+userId);
   }
 
+  // get the collection of the logged in user
+  @Get('my-collection')
+  @ApiOperation({ summary: 'Get the logged-in user\'s collection' })
+  @ApiResponse({ status: 200, description: 'List of your collection entries' })
+  getMyCollection(@Request() req) {
+    // Uses the ID from the token to fetch data securely
+    return this.collectionService.getByUser(req.user.id);
+  }
+
   // Add music item to user collection
   @Post()
   @ApiOperation({ summary: 'Add music item to your collection' })

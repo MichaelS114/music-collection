@@ -13,12 +13,12 @@ const error = ref<string | null>(null);
 const rows = ref<UserMusicCollection[]>([]);
 
 async function load() {
-  if (!userId.value) return;
   loading.value = true; 
   error.value = null;
   try {
     // Fetch collection for the actual user
-    const res = await CollectionsService.getForUser(userId.value);
+    const res = await CollectionsService.getMyCollection();
+
     rows.value = res.data ?? [];
   } catch (e: any) {
     error.value = e?.message ?? 'Loading failed!';
