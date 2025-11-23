@@ -4,13 +4,15 @@ import MusicCard from '@/components/MusicCard.vue';
 import { MusicCatalogService } from '@/api/musiccatalog.service';
 import { CollectionsService } from '@/api/collections.service';
 import type { MusicItem } from '@/models/models';
+import { authState } from '@/api/apiservice'; 
 
 const loading = ref(false);
 const error = ref<string | null>(null);
 const items = ref<MusicItem[]>([]);
 const handledIds = ref<Set<number>>(new Set());
-const userId = ref<number>(3);
 
+// Get dynamic User ID
+const userId = computed(() => authState.user?.id || 0);
 
 async function fetchAllMusic() {
   loading.value = true;
@@ -26,15 +28,15 @@ async function fetchAllMusic() {
 }
 
 async function fetchHandled() {
+  if (!userId.value) return; // Don't fetch if not logged in
   try {
+    // Fetch collection for the actual user
     const res = await CollectionsService.getForUser(userId.value);
     const rows = res.data ?? [];
 
     const set = new Set<number>();
-    const map = new Map<number, number>();
     for (const r of rows) {
       set.add(r.musicId);
-      map.set(r.musicId, r.id);
     }
     handledIds.value = set;
   } catch (e: any) {
@@ -53,7 +55,6 @@ function onAdded(p: { item: MusicItem }) {
 onMounted(async () => {
   await Promise.all([fetchAllMusic(), fetchHandled()]);
 });
-
 </script>
 
 <template>
@@ -64,24 +65,14 @@ onMounted(async () => {
       <p v-if="error" class="text-red-300 text-sm mt-1">{{ error }}</p>
     </header>
 
-    <div
-      v-if="!loading && !error && filteredItems.length === 0"
-      class="text-white/60 text-l rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6"
-    >
+    <div v-if="!loading && !error && filteredItems.length === 0"
+      class="text-white/60 text-l rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
       Everything's checked! Check back later for new music.
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <MusicCard
-        v-for="m in filteredItems"
-        :key="m.id"
-        :item="m"
-        :mode="'browse'"
-        :user-id="userId"
-        class="w-full"  
-        @added="onAdded"   
-      />
+      <MusicCard v-for="m in filteredItems" :key="m.id" :item="m" :mode="'browse'" :user-id="userId" class="w-full"
+        @added="onAdded" />
     </div>
   </section>
 </template>
-

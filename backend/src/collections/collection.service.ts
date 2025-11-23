@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserMusicCollection } from '@prisma/client';
 import { UpdateCollectionDto, CreateCollectionDto, Status } from '../dto/collection.dto';
@@ -23,10 +23,10 @@ export class CollectionService {
   }
 
   // Add a new music item to a user's collection
-  async add(dto: CreateCollectionDto): Promise<UserMusicCollection> {
+  async add(dto: CreateCollectionDto, userId: number): Promise<UserMusicCollection> {
     return this.prisma.userMusicCollection.create({
       data: {
-        user: { connect: { id: dto.userId } },
+        user: { connect: { id: userId } },
         music: { connect: { id: dto.musicId } },
         status: dto.status || Status.NONE,
       },
@@ -34,30 +34,50 @@ export class CollectionService {
   }
 
   // Update the status of a collection entry
-  async update(id: number, dto: UpdateCollectionDto): Promise<UserMusicCollection> {
-    try {
-      return await this.prisma.userMusicCollection.update({
+  async update(
+      id: number,
+      dto: UpdateCollectionDto,
+      userId: number,
+    ): Promise<UserMusicCollection> {
+      // Check if the user owns this entry before updating
+      await this.getEntryAndCheckOwnership(id, userId);
+
+      return this.prisma.userMusicCollection.update({
         where: { id },
         data: { status: dto.status },
       });
-    } catch (error) {
-      // Prisma error P2025 = record not found
-      if (error.code === 'P2025') {
-        throw new NotFoundException(`Collection entry with ID ${id} not found`);
-      }
-      throw error;
     }
-  }
 
   // Remove a music item from a user's collection
-  async remove(id: number): Promise<UserMusicCollection> {
-    try {
-      return await this.prisma.userMusicCollection.delete({ where: { id } });
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException(`Collection entry with ID ${id} not found`);
-      }
-      throw error;
-    }
+  async remove(
+    id: number,
+    userId: number,
+  ): Promise<UserMusicCollection> {
+    // Check if the user owns this entry before deleting
+    await this.getEntryAndCheckOwnership(id, userId);
+
+    return this.prisma.userMusicCollection.delete({ where: { id } });
   }
+
+  // helper method to retrieve the entry and check ownership
+  private async getEntryAndCheckOwnership(id: number, userId: number) {
+    const entry = await this.prisma.userMusicCollection.findUnique({
+      where: { id },
+    });
+
+    // Case 1: Entry not found
+    if (!entry) {
+      throw new NotFoundException(`Collection entry with ID ${id} not found`);
+    }
+
+    // Case 2: User is not the owner
+    if (entry.userId !== userId) {
+      throw new ForbiddenException(
+        'Access denied: You do not own this collection entry',
+      );
+    }
+
+    return entry;
+  }
+
 }

@@ -7,9 +7,10 @@ import { MusicService } from './music/music.service';
 import { CollectionService } from './collections/collection.service';
 import { ReviewService } from './reviews/review.service';
 import { PrismaService } from './prisma/prisma.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [],
+  imports: [AuthModule],
   controllers: [
     MusicController,
     CollectionController,

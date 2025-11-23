@@ -8,11 +8,17 @@ async function bootstrap() {
   // Create NestJS application instance
   const app = await NestFactory.create(AppModule);
 
+  // Enable validation globally
+  app.useGlobalPipes(new ValidationPipe());
+
+  app.enableCors();
+
   // Configure Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Music Collection API') // API title shown in Swagger UI
     .setDescription('API documentation for managing users, music items, collections and reviews') // Short API description
     .setVersion('1.0') // API version
+    .addBearerAuth()
     .build();
 
   // Generate Swagger document with config

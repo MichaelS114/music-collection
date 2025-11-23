@@ -3,18 +3,21 @@ import CollectionsService from '@/api/collections.service';
 import { UserMusicCollection, MusicItem, Status } from '@/models/models';
 import MusicCard from '@/components/MusicCard.vue';
 import { onMounted, ref, computed } from 'vue';
+import { authState } from '@/api/apiservice'; 
 
-const userId = ref<number>(3);
+// Get dynamic User ID
+const userId = computed(() => authState.user?.id || 0);
 
 const loading = ref(false);
 const error = ref<string | null>(null);
 const rows = ref<UserMusicCollection[]>([]);
 
 async function load() {
-  if (userId.value == null) return;
+  if (!userId.value) return;
   loading.value = true; 
   error.value = null;
   try {
+    // Fetch collection for the actual user
     const res = await CollectionsService.getForUser(userId.value);
     rows.value = res.data ?? [];
   } catch (e: any) {
@@ -94,28 +97,17 @@ function onStatusChanged(p: { entryId: number; status: Status; item: MusicItem }
 
           <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <li v-for="c in groups[sec.key]" :key="c.id">
-              <MusicCard
-                :item="c.music"
-                :userId="userId"
-                mode="browse"
-                :collectionEntryId="c.id"
-                :collectionState="c.status"
-                @added="onAdded"
-                @removed="onRemoved"
-                @status-changed="onStatusChanged"
-              />
+              <MusicCard :item="c.music" :userId="userId" mode="browse" :collectionEntryId="c.id"
+                :collectionState="c.status" @added="onAdded" @removed="onRemoved" @status-changed="onStatusChanged" />
             </li>
           </ul>
         </div>
       </template>
 
-      <div
-        v-if="isEmpty"
-        class="text-white/60 text-l rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6"
-      >
+      <div v-if="isEmpty" class="text-white/60 text-l rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
         You haven't added any music to your collection yet. Browse the catalog and add some!
       </div>
-      
+
     </div>
   </section>
 </template>

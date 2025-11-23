@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -8,21 +9,28 @@ async function main() {
   await prisma.musicItem.deleteMany();
   await prisma.user.deleteMany();
 
-  // Create dummy data
-
-  // Admin
+  // Hash admin Password
+  const adminPassword = await bcrypt.hash('12345678', 10);
+  
+  // Create admin user
   const admin = await prisma.user.create({
     data: {
       username: 'admin',
       role: 'ADMIN',
+      password: adminPassword, // Hash #1
     },
   });
 
-  // Normal iser
+  
+  // Hash user password Bcrypt will generate a new random salt, so the hash will be different.
+  const userPassword = await bcrypt.hash('12345678', 10);
+
+  // Create user
   const user = await prisma.user.create({
     data: {
       username: 'user',
       role: 'USER',
+      password: userPassword, // Hash #2 (Different String than Hash #1)
     },
   });
 

@@ -9,8 +9,13 @@ import {
   ApiNotFoundResponse,
   ApiConflictResponse,
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
-import { AdminGuard } from '../auth/admin.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '@prisma/client'; 
 
 @ApiTags('Music Catalog') // Swagger group for music
 @Controller('music') // Route: /music
@@ -36,7 +41,9 @@ export class MusicController {
 
   // Create a new music item (Admin only)
   @Post()
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a music item (Admin only)' })
   @ApiResponse({ status: 201, description: 'Music item created' })
   @ApiBadRequestResponse({ description: 'Invalid creatorId or input data' })
@@ -48,7 +55,9 @@ export class MusicController {
 
   // Update an existing music item (Admin only)
   @Patch(':id')
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a music item (Admin only)' })
   @ApiResponse({ status: 200, description: 'Music item updated' })
   @ApiNotFoundResponse({ description: 'Music item not found' })
@@ -59,7 +68,9 @@ export class MusicController {
 
   // Delete a music item by ID (Admin only)
   @Delete(':id')
-  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Delete a music item (Admin only)' })
   @ApiResponse({ status: 200, description: 'Music item deleted' })
   @ApiNotFoundResponse({ description: 'Music item not found' })
